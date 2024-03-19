@@ -32,17 +32,12 @@ from .version import __version__
 class I2cMaster:
 
     def __init__(self, sda=None, sda_o=None, scl=None, scl_o=None, speed=400e3, *args, **kwargs):
-        self.log = logging.getLogger(f"cocotb.{sda._path}")
+        self.log = logging.getLogger("cocotb.tb.i2c_master")
         self.sda = sda
         self.sda_o = sda_o
         self.scl = scl
         self.scl_o = scl_o
         self.speed = speed
-
-        self.log.info("I2C Master")
-        self.log.info("cocotbext-i2c version %s", __version__)
-        self.log.info("Copyright (c) 2020 Alex Forencich")
-        self.log.info("https://github.com/alexforencich/cocotbext-i2c")
 
         super().__init__(*args, **kwargs)
 
