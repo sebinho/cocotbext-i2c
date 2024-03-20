@@ -141,7 +141,9 @@ class I2cMaster:
         return b
 
     async def write(self, addr, data):
-        self.log.info("Write %s to device at I2C address 0x%02x", data, addr)
+        data_m = list(data)
+        data_m = [hex(d) for d in data_m]
+        self.log.info("Write %s to device at I2C address 0x%02x", data_m, addr)
         await self.send_start()
         ack = await self.send_byte((addr << 1) | 0)
         if ack:
