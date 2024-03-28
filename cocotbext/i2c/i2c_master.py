@@ -68,10 +68,17 @@ class I2cMaster:
             self.scl.value = val
             # self.scl <= BinaryValue('z') if val else 0
 
+    async def scl_stretching(self):
+        await Timer(1, 'ps')
+        if self.scl.value == 0:
+            self.scl_o.value = 0
+            await RisingEdge(self.scl)
+
     async def send_start(self):
         if self.bus_active:
             self._set_sda(1)
             await self._half_bit_t
+            await self.scl_stretching()
             self._set_scl(1)
             while not self.scl.value:
                 await RisingEdge(self.scl)
@@ -90,6 +97,7 @@ class I2cMaster:
 
         self._set_sda(0)
         await self._half_bit_t
+        await self.scl_stretching()
         self._set_scl(1)
         while not self.scl.value:
             await RisingEdge(self.scl)
@@ -105,6 +113,7 @@ class I2cMaster:
 
         self._set_sda(bool(b))
         await self._half_bit_t
+        await self.scl_stretching()
         self._set_scl(1)
         while not self.scl.value:
             await RisingEdge(self.scl)
@@ -119,6 +128,7 @@ class I2cMaster:
         self._set_sda(1)
         await self._half_bit_t
         b = bool(self.sda.value.integer)
+        await self.scl_stretching()
         self._set_scl(1)
         while not self.scl.value:
             await RisingEdge(self.scl)
