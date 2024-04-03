@@ -152,7 +152,7 @@ class I2cMaster:
 
     async def write(self, addr, data):
         retry_cnt = 0
-        wr_bytes_break = False
+        s_break = False
         data_m = list(data)
         data_m = [hex(d) for d in data_m]
         while retry_cnt != self.retries+1:
